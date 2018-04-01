@@ -16,17 +16,26 @@ import java.net.Socket;
 public class Server implements Runnable{
     private int port;
     private ServerSocket server;
+    private TTS tts;
 
-    public Server(int inPort){
+    public Server(int inPort, TTS inTTS){
         port = inPort;
+        tts = inTTS;
     }
 
+    //process response and translate it to speech
     public void processResponse(String response){
-        //not sure how to process this yet
+        Message ttsMsg = tts.handler.obtainMessage();
+        Bundle b = new Bundle();
+        b.putString("TT", response);
+        ttsMsg.setData(b);
+        tts.handler.sendMessage(ttsMsg);
     }
 
+    //listen for any incoming messages from rob
     public void runServer(){
         try{
+            System.out.println("Starting up server...");
             server = new ServerSocket(port);
             while(true){
                 Socket socket = server.accept();
@@ -36,6 +45,7 @@ public class Server implements Runnable{
                 socket.close();
 
                 if(response != null){
+                    System.out.println("INCOMING MESSAGE: " + response);
                     processResponse(response);
                     response = null;
                 }
@@ -50,6 +60,7 @@ public class Server implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Server Thread Starting");
         runServer();
     }
 }

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
 
+import java.sql.SQLOutput;
 import java.util.Locale;
 import java.util.logging.LogRecord;
 
@@ -41,7 +42,9 @@ public class TTS extends Thread implements TextToSpeech.OnInitListener{
         }
     }
 
+    @Override
     public void run(){
+        System.out.println("TTS Thread Starting");
         Looper.prepare();
            handler = new Handler() {
                public void handleMessage(Message msg){
@@ -52,8 +55,10 @@ public class TTS extends Thread implements TextToSpeech.OnInitListener{
         Looper.loop();
     }
 
+    //convert text to speech
     public void speak(String text){
         if(last != text){
+            System.out.println("Translating TTS Message: " + text);
             last = text;
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
 

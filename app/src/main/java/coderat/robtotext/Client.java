@@ -27,9 +27,11 @@ public class Client implements Runnable{
     public void send(String message){
         try {
             client = new Socket(ip, port);
+            System.out.println("Client connected to ROB");
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
             out.writeUTF(message);
+            System.out.println("Sent Message: " + message);
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,6 +41,7 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Client Thread Starting");
         Looper.prepare();
           handler = new Handler() {
                 public void handleMessage(Message msg){

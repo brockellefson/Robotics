@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private Server server;
     private String message;
 
+    //text to speech
+    private TTS tts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +41,22 @@ public class MainActivity extends AppCompatActivity {
         conButton = findViewById((R.id.wififragbutton));
         input = findViewById(R.id.speechtext);
 
+        //create tts
+        tts = new TTS(this);
+        Thread ttsThread = new Thread(tts);
+        ttsThread.start();
+
         //create network
         client = new Client("localhost", 3030);
         Thread clientThread = new Thread(client);
         clientThread.start();
 
-        server = new Server(4040);
+        server = new Server(4040, tts);
         Thread serverThread = new Thread(server);
         serverThread.start();
+
+
+
 
         //create a listener for the send button
         sendButton.setOnClickListener(new View.OnClickListener() {
