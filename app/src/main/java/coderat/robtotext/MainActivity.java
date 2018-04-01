@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     //networking
     private Client client;
+    private Server server;
     private String message;
 
     @Override
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         client = new Client("localhost", 3030);
         Thread clientThread = new Thread(client);
         clientThread.start();
+
+        server = new Server(4040);
+        Thread serverThread = new Thread(server);
+        serverThread.start();
 
         //create a listener for the send button
         sendButton.setOnClickListener(new View.OnClickListener() {
