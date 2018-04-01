@@ -2,6 +2,7 @@ package coderat.robtotext;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton sendButton;
     private ImageButton conButton;
 
+    //networking
+    private Client client;
+    private String message;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,19 @@ public class MainActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.sendbutton);
         conButton = findViewById((R.id.wififragbutton));
         input = findViewById(R.id.speechtext);
+
+        //create network
+        client = new Client("localhost", 3030);
+        Thread clientThread = new Thread(client);
+        clientThread.start();
+
+        //create a listener for the send button
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {SendTTS();
+            }
+        });
+
 
         //create a listener for the speech button
         speakButton.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //send the tts create message to the py
+    private void SendTTS(){
+        if(message != null){
+            Message clientMsg = client.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("CM", message);
+            clientMsg.setData(b);
+            client.handler.sendMessage(clientMsg);
+        }
+    }
+
 
     //display text from speech
     @Override
@@ -65,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     input.setText(result.get(0));
+                    message = result.get(0);
                 }
                 break;
             }

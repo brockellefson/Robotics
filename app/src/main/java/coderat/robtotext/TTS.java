@@ -5,13 +5,13 @@ package coderat.robtotext;
  */
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
 
 import java.util.Locale;
-import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 
@@ -43,12 +43,12 @@ public class TTS extends Thread implements TextToSpeech.OnInitListener{
 
     public void run(){
         Looper.prepare();
-/*            handler = new Handler() {
-                public void handleMessage(Message msg){
+           handler = new Handler() {
+               public void handleMessage(Message msg){
                     String response = msg.getData().getString("TT");
                     speak(response);
                 }
-            };*/
+            };
         Looper.loop();
     }
 
