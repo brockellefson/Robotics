@@ -28,10 +28,10 @@ public class Client implements Runnable{
         try {
             client = new Socket(ip, port);
             System.out.println("Client connected to ROB");
-            DataOutputStream out = new DataOutputStream(client.getOutputStream());
+            OutputStream outToServer = client.getOutputStream();
+            DataOutputStream out = new DataOutputStream(outToServer);
             out.writeUTF(message);
             System.out.println("Sent Message: " + message);
-            out.close();
             client.close();
         } catch (IOException e) {
             e.printStackTrace();

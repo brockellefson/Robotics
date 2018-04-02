@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
     //text to speech
     private TTS tts;
 
+    //threads
+    Thread ttsThread;
+    Thread clientThread;
+    Thread serverThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +48,16 @@ public class MainActivity extends AppCompatActivity {
 
         //create tts
         tts = new TTS(this);
-        Thread ttsThread = new Thread(tts);
+        ttsThread = new Thread(tts);
         ttsThread.start();
 
         //create network
-        client = new Client("10.0.2.2", 3030);
-        Thread clientThread = new Thread(client);
+        client = new Client("175.45.106.166", 3030);
+        clientThread = new Thread(client);
         clientThread.start();
 
         server = new Server(4040, tts);
-        Thread serverThread = new Thread(server);
+        serverThread = new Thread(server);
         serverThread.start();
 
 
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle b = new Bundle();
             b.putString("CM", message);
             clientMsg.setData(b);
-            client.handler.sendMessage(clientMsg);
+            client.handler.handleMessage(clientMsg);
         }
     }
 
