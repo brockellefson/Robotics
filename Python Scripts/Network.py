@@ -16,18 +16,19 @@ class Server:
         self.data = ''
 
     def runServer(self):
-            while 1:
-                s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-                s.bind(("localhost", self.port))
-                s.listen(5)
-                conn, addr = s.accept()
-                print("Android connected to server")
-                data = conn.recv(1024)
-                processData(data)
-                s.close()
+        print('Server starting')
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("localhost", self.port))
+        while 1:
+            s.listen(5)
+            conn, addr = s.accept()
+            print("Android connected to server")
+            data = conn.recv(1024)
+            self.processData(data)
+            s.close()
 
     def run(self):
-        print ('Server Starting\n')
+        print ('Server Thread Starting\n')
         while True:
             self.runServer()
 
@@ -45,10 +46,11 @@ class Client:
             s.connect((self.ip, self.port)) #connects us to server
             print ("Client connected")
             s.send(bytes(self.ttsmsg)) #post to server
+            print('Sent message: ' + self.ttsmsg)
             s.close() #close connection
 
     def run(self):
-        print ('Client Starting\n')
+        print ('Client Thread Starting\n')
         while True:
             if self.ttsmsg is not '': #if we have a message to send to Android
                 self.runClient()

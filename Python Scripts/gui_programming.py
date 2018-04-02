@@ -160,22 +160,22 @@ class GUI:
 				if 'w' == input:
 					self.ROB.setTarget(1, 6000 - wheel_speed)
 					sleep(duration)
-					stop_wheels()
+					self.stop_wheels()
 				if 'a' == input:
 					self.ROB.setTarget(2, 6000 + wheel_speed)
 					sleep(duration)
-					stop_wheels()
+					self.stop_wheels()
 				if 's' == input:
 					self.ROB.setTarget(1, 6000 + wheel_speed)
 					sleep(duration)
-					stop_wheels()
+					self.stop_wheels()
 				if 'd' == input:
 					self.ROB.setTarget(2, 6000 - wheel_speed)
 					sleep(duration)
-					stop_wheels()
+					self.stop_wheels()
 				if ' ' == input:
 					sleep(duration)
-					stop_wheels()
+					self.stop_wheels()
 
 				# head movement
 				if 'head_vert' == input:

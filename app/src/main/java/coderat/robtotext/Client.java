@@ -34,6 +34,10 @@ public class Client implements Runnable{
             System.out.println("Sent Message: " + message);
             client.close();
         } catch (IOException e) {
+            //ouch lol
+            e.printStackTrace();
+        } catch (Exception e) {
+            //eek lol
             e.printStackTrace();
         }
     }

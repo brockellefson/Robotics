@@ -29,14 +29,28 @@ if __name__ == '__main__':
         if server.data is not '':
             data = server.data
             data = data.lower()
+
             if data is 'rob go forward':
                 gui.add_forward()
+                client.ttsmsg = 'moving forward my dude'
+
             elif data is 'rob go backwards':
                 gui.add_reverse()
+                client.ttsmsg = 'moving backwards my dude'
+
             elif data is 'rob go left':
                 gui.add_left()
+                client.ttsmsg = 'moving left my dude'
+
             elif data is 'rob go right':
                 gui.add_right()
+                client.ttsmsg = 'moving right my dude'
+
             elif data is 'hit it my dude':
                 gui.submit()
-            server.resetData
+                client.ttsmsg = 'im gassing it'
+
+            else:
+                client.ttsmsg = 'fam what how can this even happen'
+
+            server.resetData()
