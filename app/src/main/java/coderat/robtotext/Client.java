@@ -18,10 +18,12 @@ public class Client implements Runnable{
     private int port;
     private Socket client;
     public Handler handler;
+    private String message;
 
-    public Client(String inIP, int inPort){
+    public Client(String inIP, int inPort, String inMessage){
         ip = inIP;
         port = inPort;
+        message = inMessage;
     }
 
     public void send(String message){
@@ -46,13 +48,6 @@ public class Client implements Runnable{
     @Override
     public void run() {
         System.out.println("Client Thread Starting");
-        Looper.prepare();
-          handler = new Handler() {
-                public void handleMessage(Message msg){
-                    String response = msg.getData().getString("CM");
-                    send(response);
-                }
-            };
-        Looper.loop();
+        send(message);
     }
 }

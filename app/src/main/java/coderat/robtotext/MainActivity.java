@@ -52,14 +52,10 @@ public class MainActivity extends AppCompatActivity {
         ttsThread.start();
 
         //create network
-        client = new Client("175.45.106.166", 3030);
-        clientThread = new Thread(client);
-        clientThread.start();
-
         server = new Server(4040, tts);
         serverThread = new Thread(server);
         serverThread.start();
-
+        //moved client creation the button onClick to avoid NetworkOnMainThread
 
 
 
@@ -96,11 +92,9 @@ public class MainActivity extends AppCompatActivity {
     //send the tts create message to the py
     private void SendTTS(){
         if(message != null){
-            Message clientMsg = client.handler.obtainMessage();
-            Bundle b = new Bundle();
-            b.putString("CM", message);
-            clientMsg.setData(b);
-            client.handler.handleMessage(clientMsg);
+            client = new Client("175.45.106.166", 3030, message );
+            clientThread = new Thread(client);
+            clientThread.start();
         }
     }
 
