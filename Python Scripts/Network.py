@@ -19,7 +19,7 @@ class Server:
             while 1:
                 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 s.bind(("localhost", self.port))
-                s.listen(1)
+                s.listen(5)
                 conn, addr = s.accept()
                 print("Android connected to server")
                 data = conn.recv(1024)

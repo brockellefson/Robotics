@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         ttsThread.start();
 
         //create network
-        client = new Client("localhost", 3030);
+        client = new Client("10.0.2.2", 3030);
         Thread clientThread = new Thread(client);
         clientThread.start();
 

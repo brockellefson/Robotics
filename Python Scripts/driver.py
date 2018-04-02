@@ -20,6 +20,23 @@ if __name__ == '__main__':
     #start threads
     for t in thread_L:
         t.start()
-        
+
     gui = gui_programming.GUI()
     gui.run()
+
+    while True:
+
+        if server.data is not '':
+            data = server.data
+            data = data.lower()
+            if data is 'rob go forward':
+                gui.add_forward()
+            elif data is 'rob go backwards':
+                gui.add_reverse()
+            elif data is 'rob go left':
+                gui.add_left()
+            elif data is 'rob go right':
+                gui.add_right()
+            elif data is 'hit it my dude':
+                gui.submit()
+            server.resetData
