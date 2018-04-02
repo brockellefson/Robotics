@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     //send the tts create message to the py
     private void SendTTS(){
         if(message != null){
-            client = new Client("175.45.106.166", 3030, message );
+            client = new Client("10.152.168.168", 3030, message );
             clientThread = new Thread(client);
             clientThread.start();
         }

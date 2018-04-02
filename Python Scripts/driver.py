@@ -6,7 +6,7 @@ if __name__ == '__main__':
     object_L = [] #keeps track of objects, so we can kill their threads at the end
 
     #create network
-    client = Network.Client('localhost', 4040)
+    client = Network.Client('10.152.179.51', 4040)
     object_L.append(client)
 
     server = Network.Server(3030)
@@ -21,33 +21,33 @@ if __name__ == '__main__':
     for t in thread_L:
         t.start()
 
-    gui = gui_programming.GUI()
-    gui.run()
+    # gui = gui_programming.GUI()
+    # gui.run()
 
     while True:
 
         if server.data is not '':
             data = server.data
             data = data.lower()
-
-            if data is 'rob go forward':
-                gui.add_forward()
+            print('Driver data: ' + data)
+            if 'forward' in data:
+                #gui.add_forward()
                 client.ttsmsg = 'moving forward my dude'
 
-            elif data is 'rob go backwards':
-                gui.add_reverse()
+            elif 'backwards' in data:
+                #gui.add_reverse()
                 client.ttsmsg = 'moving backwards my dude'
 
-            elif data is 'rob go left':
-                gui.add_left()
+            elif 'left' in data:
+                #gui.add_left()
                 client.ttsmsg = 'moving left my dude'
 
-            elif data is 'rob go right':
-                gui.add_right()
+            elif 'right' in data:
+                #gui.add_right()
                 client.ttsmsg = 'moving right my dude'
 
-            elif data is 'hit it my dude':
-                gui.submit()
+            elif 'hit it my dude' in data:
+                #gui.submit()
                 client.ttsmsg = 'im gassing it'
 
             else:
