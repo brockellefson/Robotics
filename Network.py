@@ -35,6 +35,9 @@ class Server:
         while True:
             self.runServer()
 
+
+
+
 class Client:
     def __init__(self, ip, port):
         self.ip = ip
@@ -66,8 +69,8 @@ class Listener:
         while True:
 
             if self.server.data is not '':
-                data = self.server.data.lower()
-                # data = data.lower()
+                data = self.server.data
+                data = data.lower()
                 print('Driver data: ' + data)
                 if 'forward' in data:
                     self.gui.add_forward()
@@ -93,20 +96,19 @@ class Listener:
                     self.gui.add_right()
                     self.client.ttsmsg = 'moving right my dude'
 
+                elif 'start' in data:
+                    self.client.ttsmsg = 'im gassing it'
+                    self.gui.submit()
+
+                else:
+                    self.client.ttsmsg = 'fam what how can this even happen'
+
                 if '1' in data:
                     self.gui.temp.set(1)
+
                 elif '2' in data:
                     self.gui.temp.set(2)
+
                 elif '3' in data:
                     self.gui.temp.set(3)
-                elif '4' in data:
-                    self.gui.temp.set(2)
-                elif '5' in data:
-                    self.gui.temp.set(3)
-
-                elif 'initialize' in data:
-                    self.gui.submit()
-                    self.client.ttsmsg = 'im gassing it'
-                else:
-                    self.client.ttsmsg = 'they speak english in what??'
                 self.server.resetData()
