@@ -1,5 +1,5 @@
 import tkinter as tk
-#from Maestro import *
+from Maestro import *
 from time import sleep
 import threading
 
@@ -11,12 +11,12 @@ class GUI:
 		self.column = 3
 
 		self.commands_done = False
-
+		self.temp = tk.Scale(self.main_window)
 		self.window_width = self.main_window.winfo_screenwidth()
 		self.window_height = self.main_window.winfo_screenheight()
 
-		#self.ROB = Controller()
-		#self.ROB.setup()
+		self.ROB = Controller()
+		self.ROB.setup()
 
 	def increment_coords(self):
 		self.column += 1
@@ -27,76 +27,76 @@ class GUI:
 
 	# add_* adds a corresponding command widget to the grid
 	def add_forward(self):
-		temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Forward (seconds)', length = 105)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Forward (seconds)', length = 105)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('w')
 		self.increment_coords()
 
 
 	def add_left(self):
-		temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Left (seconds)', length = 105)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Left (seconds)', length = 105)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('a')
 		self.increment_coords()
 
 
 	def add_reverse(self):
-		temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Reverse (seconds)', length = 105)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Reverse (seconds)', length = 105)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('s')
 		self.increment_coords()
 
 
 	def add_right(self):
-		temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Right (seconds)', length = 105)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0, to = 10, orient = 'horizontal', label = 'Right (seconds)', length = 105)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('d')
 		self.increment_coords()
 
 
 	def add_center(self):
-		temp = tk.Scale(self.main_window, from_ = 0, to = 0, orient = 'horizontal', label = 'Center (seconds)', length = 105)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0, to = 0, orient = 'horizontal', label = 'Center (seconds)', length = 105)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('c')
 		self.increment_coords()
 
 
 	def add_head_vert(self):
-		temp = tk.Scale(self.main_window, from_ = -2, to = 2, orient = 'horizontal', label = 'Head vert', length = 105)
-		temp.set(0)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = -2, to = 2, orient = 'horizontal', label = 'Head vert', length = 105)
+		self.temp.set(0)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('head_vert')
 		self.increment_coords()
 
 
 	def add_head_horz(self):
-		temp = tk.Scale(self.main_window, from_ = -2, to = 2, orient = 'horizontal', label = 'Head horz', length = 105)
-		temp.set(0)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = -2, to = 2, orient = 'horizontal', label = 'Head horz', length = 105)
+		self.temp.set(0)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('head_horz')
 		self.increment_coords()
 
 
 	def add_waist(self):
-		temp = tk.Scale(self.main_window, from_ = -1, to = 1, orient = 'horizontal', label = 'Waist', length = 105)
-		temp.set(0)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = -1, to = 1, orient = 'horizontal', label = 'Waist', length = 105)
+		self.temp.set(0)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('waist')
 		self.increment_coords()
 
 
 	def add_noop(self):
-		temp = tk.Scale(self.main_window, from_ = 0.0, to = 5.0, bigincrement = 0.2, orient = 'horizontal', label = 'Wait tenth seconds', length = 105)
-		temp.set(0)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 0.0, to = 5.0, bigincrement = 0.2, orient = 'horizontal', label = 'Wait tenth seconds', length = 105)
+		self.temp.set(0)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('noop')
 		self.increment_coords()
 
 
 	def set_speed(self):
-		temp = tk.Scale(self.main_window, from_ = 1, to = 3, orient = 'horizontal', label = 'Speed', length = 105)
-		temp.set(1)
-		temp.grid(row = self.row, column = self.column)
+		self.temp = tk.Scale(self.main_window, from_ = 1, to = 3, orient = 'horizontal', label = 'Speed', length = 105)
+		self.temp.set(1)
+		self.temp.grid(row = self.row, column = self.column)
 		self.command_list.append('speed')
 		self.increment_coords()
 

@@ -2,6 +2,7 @@
 #Brock Ellefson Trent Baker
 import sys
 import socket
+import gui_programming
 import threading
 
 class Server:
@@ -18,7 +19,7 @@ class Server:
     def runServer(self):
         print('Server starting')
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("10.152.168.168", self.port))
+        s.bind(("10.200.17.114", self.port))
         while 1:
             s.listen(5)
             conn, addr = s.accept()
@@ -57,3 +58,57 @@ class Client:
             if self.ttsmsg is not '': #if we have a message to send to Android
                 self.runClient()
                 self.ttsmsg = ''
+
+class Listener:
+    def __init__(self, server, client, gui):
+        self.server = server
+        self.client = client
+        self.gui = gui
+
+    def run(self):
+        while True:
+
+            if self.server.data is not '':
+                data = self.server.data
+                data = data.lower()
+                print('Driver data: ' + data)
+                if 'forward' in data:
+                    self.gui.add_forward()
+                    self.client.ttsmsg = 'moving forward my dude'
+
+                elif 'backwards' in data:
+                    self.gui.add_reverse()
+                    self.client.ttsmsg = 'moving backwards my dude'
+
+                elif 'left' in data:
+                    self.gui.add_left()
+                    self.client.ttsmsg = 'moving left my dude'
+
+                elif 'center' in data:
+                    self.gui.add_center()
+                    self.client.ttsmsg = 'im straight as an arrow'
+
+                elif 'delete' in data:
+                    self.gui.clear_program()
+                    self.client.ttsmsg = 'kill myself l m a o'
+
+                elif 'right' in data:
+                    self.gui.add_right()
+                    self.client.ttsmsg = 'moving right my dude'
+
+                elif 'start' in data:
+                    self.client.ttsmsg = 'im gassing it'
+                    self.gui.submit()
+
+                else:
+                    self.client.ttsmsg = 'fam what how can this even happen'
+
+                if '1' in data:
+                    self.gui.temp.set(1)
+
+                elif '2' in data:
+                    self.gui.temp.set(2)
+
+                elif '3' in data:
+                    self.gui.temp.set(3)
+                self.server.resetData()
