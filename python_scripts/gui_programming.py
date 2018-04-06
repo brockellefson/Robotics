@@ -11,7 +11,7 @@ class GUI:
 		self.column = 3
 
 		self.commands_done = False
-		self.temp = tk.Scale(self.main_window)
+		self.temp = tk.Scale(self.main_window, label = 'ghost_child')
 		self.window_width = self.main_window.winfo_screenwidth()
 		self.window_height = self.main_window.winfo_screenheight()
 
@@ -111,12 +111,12 @@ class GUI:
 
 		# scrape the grid for durations
 		for i in range(len(children)):
-			if type(children[i]) == tk.Scale:
+			if type(children[i]) == tk.Scale and children[i].cget('label') != 'ghost_child':
 				print('DEBUG: command_list[{}]'.format(next_command))
 				try:
 					output_list.append([self.command_list[next_command], children[i].get()])
 				except IndexError:
-					print('that weird thing happened on index {}, we I ignored it'.format(i))
+					print('that weird thing happened on index {}, we ignored it'.format(i))
 				next_command += 1
 		print(output_list)
 

@@ -19,7 +19,7 @@ class Server:
     def runServer(self):
         print('Server starting')
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("10.200.17.114", self.port))
+        s.bind(("10.200.1.118", self.port))
         while 1:
             s.listen(5)
             conn, addr = s.accept()
@@ -74,7 +74,7 @@ class Listener:
                     self.gui.add_forward()
                     self.client.ttsmsg = 'moving forward my dude'
 
-                elif 'backwards' in data:
+                elif 'reverse' in data:
                     self.gui.add_reverse()
                     self.client.ttsmsg = 'moving backwards my dude'
 
@@ -95,7 +95,7 @@ class Listener:
                     self.client.ttsmsg = 'moving right my dude'
 
                 elif 'start' in data:
-                    self.client.ttsmsg = 'im gassing it'
+                    self.client.ttsmsg = 'Im Rick Harrison, and this is my pawn shop. I work here with my old man and my son, Big Hoss. Everything in here has a story and a price. One thing Ive learned after 21 years you never know what is gonna come through that door.'
                     self.gui.submit()
 
                 else:
@@ -109,4 +109,11 @@ class Listener:
 
                 elif '3' in data:
                     self.gui.temp.set(3)
+
+                elif '4' in data:
+                    self.gui.temp.set(4)
+
+                elif '5' in data:
+                    self.gui.temp.set(5)
+                    
                 self.server.resetData()

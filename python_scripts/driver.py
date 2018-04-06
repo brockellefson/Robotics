@@ -7,7 +7,7 @@ if __name__ == '__main__':
     gui = gui_programming.GUI()
 
     #create network
-    client = Network.Client('10.200.22.229', 4040)
+    client = Network.Client('10.200.53.215', 4040)
     object_L.append(client)
 
     server = Network.Server(3030)
