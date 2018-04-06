@@ -113,7 +113,10 @@ class GUI:
 		for i in range(len(children)):
 			if type(children[i]) == tk.Scale:
 				print('DEBUG: command_list[{}]'.format(next_command))
-				output_list.append([self.command_list[next_command], children[i].get()])
+				try:
+					output_list.append([self.command_list[next_command], children[i].get()])
+				except IndexError:
+					print('that weird thing happened on index {}, we I ignored it'.format(i))
 				next_command += 1
 		print(output_list)
 
