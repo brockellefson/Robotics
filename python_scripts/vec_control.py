@@ -9,26 +9,35 @@ class Pose():
             out += str(target) + ' '
         return out
 
-    # this lets us use percentages for range of motion because they are more intuitive
-    def head_up(self, amount=2000):
-        if amount != 2000:
-            amount *= 40
-        self.pose[4] += amount
+    @staticmethod
+    def translate_to_servo(percent):
+        return int((percent / 100) * 2000)
+        # this lets us use percentages for range of motion because they are more intuitive
 
-    def head_down(self, amount=2000):
-        if amount != 2000:
-            amount *= 40
-        self.pose[4] += amount
+    def center_all(self):
+        self.pose = [6000] * 17
 
-    def head_left(self, amount=1000):
-        if amount != 1000:
-            amount *= 40
-        self.pose[3] += 1000
+    # we might want these to also make the robot move, but for now they just modify the pose
+    # if we want them to move the robot, then we should call strike on some Controller
+    # but then the Controller would need to be an instance/class variable
 
-    def head_right(self, amount=1000):
-        if amount != 1000:
-            amount *= 40
-        self.pose[3] -= 1000
+    def head_up(self, amount=50):
+        self.pose[4] += self.translate_to_servo(amount)
+
+    def head_down(self, amount=50):
+        self.pose[4] -= self.translate_to_servo(amount)
+
+    def head_left(self, amount=50):
+        self.pose[3] += self.translate_to_servo(amount)
+
+    def head_right(self, amount=50):
+        self.pose[3] -= self.translate_to_servo(amount)
+
+    def waist_left(self, amount=50):
+        self.pose[0] -= self.translate_to_servo(amount)
+
+    def waist_right(self, amount=50):
+        self.pose[0] -= self.translate_to_servo(amount)
 
 
 def main():
@@ -39,6 +48,9 @@ def main():
     print(a)
     a.head_right()
     a.head_right()
+    print(str(a) + '\n')
+
+    a.waist_left(100)
     print(a)
 
 
