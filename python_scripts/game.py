@@ -1,33 +1,35 @@
 import random
+import tkinter as tk
+
 
 class Game:
     def __init__(self):
         self.board = []
-        #easy, medium, hard, start, end, bars, shop, fun
+        # easy, medium, hard, start, end, bars, shop, fun
         self.events = [6, 5, 3, 1, 1, 3, 2, 4]
 
     def create_node(self):
-        type = random.randint(0,len(self.events))
+        event_type = random.randint(0, len(self.events))
         type_s = ''
-        if type is 0:
+        if event_type is 0:
             type_s = 'easy'
-        elif type is 1:
+        elif event_type is 1:
             type_s = 'medium'
-        elif type is 2:
+        elif event_type is 2:
             type_s = 'hard'
-        elif type is 3:
+        elif event_type is 3:
             type_s = 'start'
-        elif type is 4:
+        elif event_type is 4:
             type_s = 'end'
-        elif type is 5:
+        elif event_type is 5:
             type_s = 'bars'
-        elif type is 6:
+        elif event_type is 6:
             type_s = 'shop'
-        elif type is 7:
+        elif event_type is 7:
             type_s = 'fun'
-        self.events[type] = self.events[type] - 1
-        if self.events[type] is 0:
-            self.events.pop(type)
+        self.events[event_type] = self.events[event_type] - 1
+        if self.events[event_type] is 0:
+            self.events.pop(event_type)
         return Node(type_s)
 
     def create_board(self):
@@ -110,6 +112,7 @@ class Game:
 
         self.board[24].set_west(self.board[23])
 
+
 class Node:
     def __init__(self, type):
         self.north = False
@@ -118,23 +121,30 @@ class Node:
         self.west = False
         self.type = type
 
+        self.widget = None
+
     def begin_scenario(self):
         if type is 'easy':
             self.combat_scenario(1)
         elif type is 'bar':
-            #do bar
+            # do bar
+            print('you called an unimplemented method')
         elif type is 'fun':
-            #do fun
+            # do fun
+            print('you called an unimplemented method')
         elif type is 'shop':
-            #do bar
+            # do bar
+            print('you called an unimplemented method')
         elif type is 'medium':
             self.combat_scenario(2)
         elif type is 'hard':
             self.combat_scenario(3)
         elif type is 'start':
-            #do start
+            # do start
+            print('you called an unimplemented method')
         elif type is 'end':
             # do end
+            print('you called an unimplemented method')
 
     def set_north(self, node):
         self.north = True
@@ -174,7 +184,7 @@ class Node:
 
     def combat_scenario(battle):
         enl = []
-        enimies = random.randint(1,3)
+        enemies = random.randint(1, 3)
         for enemy in enemies:
             enemy = Enemy(battle)
             enl.append(enemy)
@@ -182,8 +192,14 @@ class Node:
         self.combat(enl)
 
     def combat(enemies):
+        print('you called an unimplemented method')
 
-
+    def make_widget(self):
+        # I dont know what type of widget to make this class
+        # or if this function even needs to exist
+        # we do need some way to put the map on the gui
+        self.widget = tk.PhotoImage(file='image_pngs/headv.png')
+        return self.widget
 
 
 class Enemy:
