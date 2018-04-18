@@ -1,166 +1,87 @@
 import random
 import tkinter as tk
+import level2
 
 
 class Game:
     def __init__(self):
         self.board = []
         # easy, medium, hard, start, end, bars, shop, fun
-        self.events = [6, 5, 3, 1, 1, 3, 2, 4]
-
-    def create_node(self):
-        event_type = random.randint(0, len(self.events))
-        type_s = ''
-        if event_type is 0:
-            type_s = 'easy'
-        elif event_type is 1:
-            type_s = 'medium'
-        elif event_type is 2:
-            type_s = 'hard'
-        elif event_type is 3:
-            type_s = 'start'
-        elif event_type is 4:
-            type_s = 'end'
-        elif event_type is 5:
-            type_s = 'bars'
-        elif event_type is 6:
-            type_s = 'shop'
-        elif event_type is 7:
-            type_s = 'fun'
-        self.events[event_type] = self.events[event_type] - 1
-        if self.events[event_type] is 0:
-            self.events.pop(event_type)
-        return Node(type_s)
+        # self.events = [6, 5, 3, 1, 1, 3, 2, 4]
+        self.events = ['start', 'end', 'recharge', 'weak', 'weak', 'weak', 'weak', 'strong', 'strong']
 
     def create_board(self):
-        for count in range(25):
-            x = self.create_node()
-            self.board.append(x)
+        # creates all necessary nodes
+        for i in range(len(self.events)):
+            random.shuffle(self.events)
 
-        self.board[0].set_east(self.board[1])
+            # if you are about to place a start or end node anywhere but a corner,
+            # shuffle until you place a valid node there instead
+            while (self.events[-1] == 'start' or self.events[-1] == 'end') and i not in [0, 2, 6, 8]:
+                random.shuffle(self.events)
 
-        self.board[1].set_west(self.board[0])
-        self.board[1].set_east(self.board[2])
-        self.board[1].set_south(self.board[6])
+            self.board.append(Node(self.events.pop()))
 
-        self.board[2].set_west(self.board[1])
-        self.board[2].set_south(self.board[7])
+        # add predefined connections
+        for i in range(len(self.board)):
+            self.board[i].set_connections(level2.connections[i])
 
-        self.board[3].set_east(self.board[4])
-
-        self.board[4].set_west(self.board[3])
-        self.board[4].set_south(self.board[9])
-
-        self.board[5].set_east(self.board[6])
-        self.board[5].set_south(self.board[10])
-
-        self.board[6].set_west(self.board[5])
-        self.board[6].set_south(self.board[11])
-        self.board[6].set_north(self.board[1])
-
-        self.board[7].set_north(self.board[1])
-
-        self.board[8].set_east(self.board[9])
-        self.board[8].set_south(self.board[13])
-
-        self.board[9].set_north(self.board[4])
-        self.board[9].set_west(self.board[8])
-        self.board[9].set_south(self.board[14])
-
-        self.board[10].set_north(self.board[5])
-        self.board[10].set_south(self.board[15])
-
-        self.board[11].set_east(self.board[12])
-        self.board[11].set_north(self.board[6])
-
-        self.board[12].set_west(self.board[11])
-        self.board[12].set_east(self.board[13])
-
-        self.board[13].set_north(self.board[8])
-        self.board[13].set_south(self.board[18])
-        self.board[13].set_west(self.board[12])
-
-        self.board[14].set_north(self.board[9])
-        self.board[14].set_south(self.board[19])
-
-        self.board[15].set_north(self.board[10])
-        self.board[15].set_east(self.board[16])
-
-        self.board[16].set_west(self.board[15])
-        self.board[16].set_south(self.board[21])
-
-        self.board[17].set_south(self.board[22])
-
-        self.board[18].set_north(self.board[13])
-        self.board[18].set_east(self.board[19])
-        self.board[18].set_south(self.board[23])
-
-        self.board[19].set_west(self.board[18])
-        self.board[19].set_north(self.board[14])
-
-        self.board[20].set_east(self.board[21])
-
-        self.board[21].set_west(self.board[20])
-        self.board[21].set_north(self.board[17])
-        self.board[21].set_east(self.board[22])
-
-        self.board[22].set_west(self.board[21])
-        self.board[22].set_north(self.board[17])
-
-        self.board[23].set_north(self.board[18])
-        self.board[23].set_east(self.board[24])
-
-        self.board[24].set_west(self.board[23])
+    def __str__(self):
+        out = 'Current board:\n'
+        for node in self.board:
+            out += str(node) + '\n'
+        return out
 
 
 class Node:
-    def __init__(self, type):
-        self.north = False
-        self.south = False
-        self.east = False
-        self.west = False
-        self.type = type
+    def __init__(self, node_type, connections={}):
+        # self.north = False
+        # self.south = False
+        # self.east = False
+        # self.west = False
+
+        self.connections = connections
+
+        self.node_type = node_type
 
         self.widget = None
 
+    def __str__(self):
+        return '{} node with connections: {}'.format(self.node_type, self.connections)
+
     def begin_scenario(self):
-        if type is 'easy':
+        if node_type is 'easy':
             self.combat_scenario(1)
-        elif type is 'bar':
+        elif node_type is 'bar':
             # do bar
             print('you called an unimplemented method')
-        elif type is 'fun':
+        elif node_type is 'fun':
             # do fun
             print('you called an unimplemented method')
-        elif type is 'shop':
+        elif node_type is 'shop':
             # do bar
             print('you called an unimplemented method')
-        elif type is 'medium':
+        elif node_type is 'easy':
             self.combat_scenario(2)
-        elif type is 'hard':
+        elif node_type is 'hard':
             self.combat_scenario(3)
-        elif type is 'start':
+        elif node_type is 'start':
             # do start
             print('you called an unimplemented method')
-        elif type is 'end':
+        elif node_type is 'end':
             # do end
             print('you called an unimplemented method')
 
-    def set_north(self, node):
-        self.north = True
-        self.n_node = node
+    def set_connections(self, connections):
+        self.connections = connections
 
-    def set_south(self, node):
-        self.south = True
-        self.s_node = node
-
-    def set_east(self, node):
-        self.east = True
-        self.e_node = node
-
-    def set_west(self, node):
-        self.west = True
-        self.w_node = node
+    def move(self, direction):
+        if direction in self.connections:
+            print('valid move')
+            return True
+        else:
+            print('invalid move')
+            return False
 
     def go_north(self):
         if self.north:
@@ -223,3 +144,16 @@ class Enemy:
 
     def attack():
         return 20
+
+
+def main():
+    a = Game()
+    a.create_board()
+    print(str(a) + '\n\n')
+
+    a.board[0].move('north')
+    a.board[0].move('east')
+
+
+if __name__ == '__main__':
+    main()
