@@ -19,7 +19,9 @@ class Game:
             # shuffle until you place a valid node there instead
             while (self.events[-1] == 'start' or self.events[-1] == 'end') and i not in [0, 2, 6, 8]:
                 random.shuffle(self.events)
-
+                print('retry')
+            # THIS CAN FAIL AND INFINITE LOOP
+            # WE SHOULD FIX THAT
             self.board.append(Node(self.events.pop()))
 
         # add predefined connections
@@ -35,13 +37,7 @@ class Game:
 
 class Node:
     def __init__(self, node_type, connections={}):
-        # self.north = False
-        # self.south = False
-        # self.east = False
-        # self.west = False
-
         self.connections = connections
-
         self.node_type = node_type
 
         self.widget = None
@@ -50,27 +46,19 @@ class Node:
         return '{} node with connections: {}'.format(self.node_type, self.connections)
 
     def begin_scenario(self):
-        if node_type is 'easy':
-            self.combat_scenario(1)
-        elif node_type is 'bar':
-            # do bar
+        if node_type == 'start':
             print('you called an unimplemented method')
-        elif node_type is 'fun':
-            # do fun
+        elif node_type == 'end':
             print('you called an unimplemented method')
-        elif node_type is 'shop':
-            # do bar
+        elif node_type == 'recharge':
             print('you called an unimplemented method')
-        elif node_type is 'easy':
-            self.combat_scenario(2)
-        elif node_type is 'hard':
-            self.combat_scenario(3)
-        elif node_type is 'start':
-            # do start
+        elif node_type == 'weak':
             print('you called an unimplemented method')
-        elif node_type is 'end':
-            # do end
+        elif node_type == 'strong':
             print('you called an unimplemented method')
+        else:
+            print('you called an unimplemented method')
+            print('INVALID TYPE DETECTED')
 
     def set_connections(self, connections):
         self.connections = connections
@@ -83,27 +71,7 @@ class Node:
             print('invalid move')
             return False
 
-    def go_north(self):
-        if self.north:
-            return self.n_node
-        return None
-
-    def go_south(self):
-        if self.south:
-            return self.s_node
-        return None
-
-    def go_east(self):
-        if self.east:
-            return self.e_node
-        return None
-
-    def go_west(self):
-        if self.west:
-            return self.w_node
-        return None
-
-    def combat_scenario(battle):
+    def combat_scenario(self, battle):
         enl = []
         enemies = random.randint(1, 3)
         for enemy in enemies:
@@ -112,7 +80,7 @@ class Node:
 
         self.combat(enl)
 
-    def combat(enemies):
+    def combat(self, enemies):
         print('you called an unimplemented method')
 
     def make_widget(self):
