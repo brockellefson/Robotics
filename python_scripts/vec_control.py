@@ -58,7 +58,22 @@ if __name__ == '__main__':
     main()
 
 '''
-channels
+needed:
+right_shoulder_inline
+left_shoulder_inline
+right_shoulder_lateral
+left_shoulder_lateral
+right_elbow
+left_elbow
+right_wrist
+left_wrist
+right_twist?
+left_twist?
+right_grip
+left_grip
+
+
+channels:
 0 - waist
 1 - wheels together
 2 - wheels opposite

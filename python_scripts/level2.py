@@ -17,3 +17,7 @@ connections = {
 
     # valid start/end nodes are 0, 2, 6, 8
 }
+
+corners = [0, 2, 6, 8]
+
+tile_types = ['start', 'end', 'recharge', 'weak', 'weak', 'weak', 'weak', 'strong', 'strong']

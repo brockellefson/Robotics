@@ -6,23 +6,39 @@ import level2
 class Game:
     def __init__(self):
         self.board = []
-        # easy, medium, hard, start, end, bars, shop, fun
-        # self.events = [6, 5, 3, 1, 1, 3, 2, 4]
-        self.events = ['start', 'end', 'recharge', 'weak', 'weak', 'weak', 'weak', 'strong', 'strong']
+        self.events = level2.tile_types
+        self.current_node = Node()
 
-    def create_board(self):
+    def create_board(self, debug=False):
+        '''Generate the board from level2
+        self.board = [Node]
+        Nodes contain a type, a visited status,
+        and a dictionary of connections
+        '''
+        fail_count = 0
+
         # creates all necessary nodes
         for i in range(len(self.events)):
             random.shuffle(self.events)
-
-            # if you are about to place a start or end node anywhere but a corner,
+            # if you are about to pop a start or end node anywhere but a corner,
             # shuffle until you place a valid node there instead
-            while (self.events[-1] == 'start' or self.events[-1] == 'end') and i not in [0, 2, 6, 8]:
+            while (self.events[-1] == 'start' or self.events[-1] == 'end') and i not in level2.corners:
                 random.shuffle(self.events)
-                print('retry')
-            # THIS CAN FAIL AND INFINITE LOOP
-            # WE SHOULD FIX THAT
-            self.board.append(Node(self.events.pop()))
+                fail_count += 1
+                if fail_count > 20:
+                    swap_corner = random.choice(level2.corners[:-1])
+                    if debug:
+                        print('Reached an invalid state. Swapping for {} to resolve'.format(swap_corner))
+                    temp = self.board[swap_corner]
+                    self.board[swap_corner] = Node(self.events.pop())
+                    self.events.append(temp.node_type)
+            if debug:
+                print('adding {} to the list at index {}'.format(self.events[-1], i))
+            temp_node = Node(self.events.pop())
+            self.board.append(temp_node)
+            if temp_node.node_type == 'start':
+                self.current_node = self.board[-1]
+            fail_count = 0
 
         # add predefined connections
         for i in range(len(self.board)):
@@ -36,28 +52,51 @@ class Game:
 
 
 class Node:
-    def __init__(self, node_type, connections={}):
+    def __init__(self, node_type=None, connections={}):
         self.connections = connections
         self.node_type = node_type
+        self.visited = False
+        self.game_completed = False
 
         self.widget = None
 
     def __str__(self):
         return '{} node with connections: {}'.format(self.node_type, self.connections)
 
+    def start_scenario(self):
+        print('you called an unimplemented method')
+        pass
+
+    def end_scenario(self):
+        print('end not implemented, letting you win for now cowboy')
+        self.game_completed = True
+        pass
+
+    def recharge_scenario(self):
+        print('you called an unimplemented method')
+        pass
+
+    def weak_scenario(self):
+        print('you called an unimplemented method')
+        pass
+
+    def strong_scenario(self):
+        print('you called an unimplemented method')
+        pass
+
     def begin_scenario(self):
-        if node_type == 'start':
-            print('you called an unimplemented method')
-        elif node_type == 'end':
-            print('you called an unimplemented method')
-        elif node_type == 'recharge':
-            print('you called an unimplemented method')
-        elif node_type == 'weak':
-            print('you called an unimplemented method')
-        elif node_type == 'strong':
-            print('you called an unimplemented method')
+        self.visited = True
+        if self.node_type == 'start':
+            self.start_scenario()
+        elif self.node_type == 'end':
+            self.end_scenario()
+        elif self.node_type == 'recharge':
+            self.recharge_scenario()
+        elif self.node_type == 'weak':
+            self.weak_scenario()
+        elif self.node_type == 'strong':
+            self.strong_scenario()
         else:
-            print('you called an unimplemented method')
             print('INVALID TYPE DETECTED')
 
     def set_connections(self, connections):
@@ -117,10 +156,12 @@ class Enemy:
 def main():
     a = Game()
     a.create_board()
-    print(str(a) + '\n\n')
+    # print(start_index)
 
     a.board[0].move('north')
     a.board[0].move('east')
+
+    # while
 
 
 if __name__ == '__main__':
