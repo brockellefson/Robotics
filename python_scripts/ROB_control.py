@@ -39,9 +39,9 @@ def main():
 
 		# waist movement
 		if 'n' in input:
-			ROB.setTarget(0, ROB.getPosition(0) + waist_speed)
+			ROB.setTarget(8, ROB.getPosition(0) + waist_speed)
 		if 'm' in input:
-			ROB.setTarget(0, ROB.getPosition(0) - waist_speed)
+			ROB.setTarget(8, ROB.getPosition(0) - waist_speed)
 
 		# speed selection
 		if '1' in input:

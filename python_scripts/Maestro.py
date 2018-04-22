@@ -181,15 +181,17 @@ class Controller:
         self.setTarget(3, 6000)
         self.setTarget(4, 6000)
 
-    def setup(self):
+    def setup(self, speed=60, accel=60):
         for i in range(17):
-            self.setSpeed(i, 60)
-            self.setAccel(i, 60)
+            self.setSpeed(i, speed)
+            self.setAccel(i, accel)
 
     # as in strike a pose, could rename to make more sense and be less of a meme
-    def strike(self, pose):
-        for target in range(len(pose)):
-            self.setTarget(target, pose[target])
+    def strike(self, pose, debug=False):
+        for target in range(len(pose.pose)):
+            if debug:
+                print('setting {} to {}'.format(target, pose.pose[target]))
+            self.setTarget(target, pose.pose[target])
 
 
 def getch():
