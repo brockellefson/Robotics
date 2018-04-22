@@ -58,7 +58,7 @@ class Client:
                 self.ttsmsg = ''
 
 class Listener:
-    def __init__(self, server, client, gui):
+    def __init__(self, server, client, game):
         self.server = server
         self.client = client
         self.gui = gui
@@ -66,21 +66,22 @@ class Listener:
     def run(self):
         while True:
 
+            #TODO use vec_control
             if self.server.data is not '':
                 data = self.server.data
-                data = data.lower()
+                data = data.lower(
                 print('Driver data: ' + data)
                 if 'forward' in data:
                     self.gui.add_forward()
-                    self.client.ttsmsg = 'moving forward my dude'
+                    self.client.ttsmsg = 'moving north my dude'
 
                 elif 'reverse' in data:
                     self.gui.add_reverse()
-                    self.client.ttsmsg = 'moving backwards my dude'
+                    self.client.ttsmsg = 'moving south my dude'
 
                 elif 'left' in data:
                     self.gui.add_left()
-                    self.client.ttsmsg = 'moving left my dude'
+                    self.client.ttsmsg = 'moving east my dude'
 
                 elif 'center' in data:
                     self.gui.add_center()
@@ -92,28 +93,10 @@ class Listener:
 
                 elif 'right' in data:
                     self.gui.add_right()
-                    self.client.ttsmsg = 'moving right my dude'
+                    self.client.ttsmsg = 'moving west my dude'
 
                 elif 'start' in data:
-                    self.client.ttsmsg = 'Im Rick Harrison, and this is my pawn shop. I work here with my old man and my son, Big Hoss. Everything in here has a story and a price. One thing Ive learned after 21 years you never know what is gonna come through that door.'
                     self.gui.submit()
 
-                else:
-                    self.client.ttsmsg = 'fam what how can this even happen'
 
-                if '1' in data:
-                    self.gui.temp.set(1)
-
-                elif '2' in data:
-                    self.gui.temp.set(2)
-
-                elif '3' in data:
-                    self.gui.temp.set(3)
-
-                elif '4' in data:
-                    self.gui.temp.set(4)
-
-                elif '5' in data:
-                    self.gui.temp.set(5)
-                    
                 self.server.resetData()

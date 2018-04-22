@@ -1,13 +1,16 @@
 import random
 import tkinter as tk
 import level2
-
+import Network
 
 class Game:
-    def __init__(self):
+    def __init__(self, client):
         self.board = []
         self.events = level2.tile_types
         self.current_node = Node()
+        self.rob_health = 100
+        self.client = client
+        self.gameover = False
 
     def create_board(self, debug=False):
         '''Generate the board from level2
@@ -36,7 +39,9 @@ class Game:
                 print('adding {} to the list at index {}'.format(self.events[-1], i))
             temp_node = Node(self.events.pop())
             self.board.append(temp_node)
+            self.board[-1].client = self.client
             if temp_node.node_type == 'start':
+
                 self.current_node = self.board[-1]
             fail_count = 0
 
@@ -50,52 +55,43 @@ class Game:
             out += str(node) + '\n'
         return out
 
+    def run(self):
+        self.create_board()
+        current_node = self.board[0]
+        self.client.ttsmsg ='Welcome to Lloydsville. Home of the wicked. Lets begin'
+        whie self.gameover is False:
+            if self.rob_health <= 0:
+                self.client.ttsmsg = 'My health has been depleted.'
+                self.gameover = True
+                break
+            print('Current Health: {}'.format(self.rob_health))
+            self.client.ttsmsg = 'I am at {}'.format(current_node)
+
+        self.client.ttsmsg = 'The Game is over. Goodday'
+
 
 class Node:
     def __init__(self, node_type=None, connections={}):
         self.connections = connections
         self.node_type = node_type
         self.visited = False
-        self.game_completed = False
-
         self.widget = None
 
     def __str__(self):
         return '{} node with connections: {}'.format(self.node_type, self.connections)
 
-    def start_scenario(self):
-        print('you called an unimplemented method')
-        pass
-
-    def end_scenario(self):
-        print('end not implemented, letting you win for now cowboy')
-        self.game_completed = True
-        pass
-
-    def recharge_scenario(self):
-        print('you called an unimplemented method')
-        pass
-
-    def weak_scenario(self):
-        print('you called an unimplemented method')
-        pass
-
-    def strong_scenario(self):
-        print('you called an unimplemented method')
-        pass
-
     def begin_scenario(self):
         self.visited = True
         if self.node_type == 'start':
-            self.start_scenario()
+            level2.start_scenario()
         elif self.node_type == 'end':
-            self.end_scenario()
+            level2.end_scenario()
         elif self.node_type == 'recharge':
-            self.recharge_scenario()
+            level2.recharge_scenario()
         elif self.node_type == 'weak':
-            self.weak_scenario()
+            level2.combat_scenario(1)
         elif self.node_type == 'strong':
-            self.strong_scenario()
+            level2.combat_scenario(2)
         else:
             print('INVALID TYPE DETECTED')
 
@@ -109,18 +105,6 @@ class Node:
         else:
             print('invalid move')
             return False
-
-    def combat_scenario(self, battle):
-        enl = []
-        enemies = random.randint(1, 3)
-        for enemy in enemies:
-            enemy = Enemy(battle)
-            enl.append(enemy)
-
-        self.combat(enl)
-
-    def combat(self, enemies):
-        print('you called an unimplemented method')
 
     def make_widget(self):
         # I dont know what type of widget to make this class
@@ -150,7 +134,7 @@ class Enemy:
             self.alive = False
 
     def attack():
-        return 20
+        return 10
 
 
 def main():
