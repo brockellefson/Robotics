@@ -16,6 +16,9 @@ if __name__ == '__main__':
     listener = Network.Listener(server, client, gui)
     object_L.append(listener)
 
+    game = Game.Game(client)
+    object_L.append(game)
+
     #start all the objects
     thread_L = []
     for obj in object_L:
