@@ -2,7 +2,7 @@
 #Brock Ellefson Trent Baker
 import sys
 import socket
-import gui_programming
+# import gui_programming
 import threading
 
 class Server:
@@ -69,7 +69,7 @@ class Listener:
             #TODO use vec_control
             if self.server.data is not '':
                 data = self.server.data
-                data = data.lower(
+                data = data.lower()
                 print('Driver data: ' + data)
                 if 'forward' in data:
                     self.gui.add_forward()

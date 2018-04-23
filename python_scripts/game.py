@@ -3,14 +3,16 @@ import tkinter as tk
 import level2
 import Network
 
+
 class Game:
-    def __init__(self, client):
+    def __init__(self, client=''):
         self.board = []
         self.events = level2.tile_types
         self.current_node = Node()
         self.rob_health = 100
         self.client = client
         self.gameover = False
+        self.player_prompt = '>'
 
     def create_board(self, debug=False):
         '''Generate the board from level2
@@ -41,13 +43,17 @@ class Game:
             self.board.append(temp_node)
             self.board[-1].client = self.client
             if temp_node.node_type == 'start':
-
                 self.current_node = self.board[-1]
             fail_count = 0
 
         # add predefined connections
+        if debug:
+            print('adding connections')
         for i in range(len(self.board)):
             self.board[i].set_connections(level2.connections[i])
+            self.board[i].index = i
+            if debug:
+                print('added {} to node {}'.format(level2.connections[i], i))
 
     def __str__(self):
         out = 'Current board:\n'
@@ -55,23 +61,40 @@ class Game:
             out += str(node) + '\n'
         return out
 
+    def get_status(self):
+        out = '\nThe map looks like this:\n'
+        out += level2.map_string
+        out += '\nYou are at node {}, would you like to move {}?'.format(self.current_node.index,
+                                                                         self.current_node.format_connections())
+        print(out)
+
+    def play_game(self):
+        while not self.gameover:
+            # main game loop here
+            self.get_status()
+            dir_choice = input(self.player_prompt).lower()
+            self.current_node = self.board[self.current_node.move(dir_choice)]
+
+            self.gameover = True
+
     def run(self):
         self.create_board()
         current_node = self.board[0]
-        self.client.ttsmsg ='Welcome to Lloydsville. Home of the wicked. Lets begin'
-        whie self.gameover is False:
+        self.client.ttsmsg = 'Welcome to Lloydsville. Home of the wicked. Lets begin'
+        while self.gameover is False:
             if self.rob_health <= 0:
                 self.client.ttsmsg = 'My health has been depleted.'
                 self.gameover = True
                 break
-            print('Current Health: {}'.format(self.rob_health))
-            self.client.ttsmsg = 'I am at {}'.format(current_node)
+        print('Current Health: {}'.format(self.rob_health))
+        # self.client.ttsmsg = 'I am at {}'.format(current_node)
 
         self.client.ttsmsg = 'The Game is over. Goodday'
 
 
 class Node:
     def __init__(self, node_type=None, connections={}):
+        self.index = 'ERROR'
         self.connections = connections
         self.node_type = node_type
         self.visited = False
@@ -79,6 +102,12 @@ class Node:
 
     def __str__(self):
         return '{} node with connections: {}'.format(self.node_type, self.connections)
+
+    def format_connections(self):
+        out = ''
+        for dir in self.connections:
+            out += dir + ' or '
+        return out[0:-4]
 
     def begin_scenario(self):
         self.visited = True
@@ -101,10 +130,13 @@ class Node:
     def move(self, direction):
         if direction in self.connections:
             print('valid move')
-            return True
+            return self.connections[direction]
+        elif direction == 'yes' and len(self.connections) == 1:
+            for connection in self.connections:
+                return self.connections[connection]
         else:
             print('invalid move')
-            return False
+            return self.index
 
     def make_widget(self):
         # I dont know what type of widget to make this class
@@ -139,12 +171,10 @@ class Enemy:
 
 def main():
     a = Game()
-    a.create_board()
+    a.create_board(True)
     # print(start_index)
 
-    a.board[0].move('north')
-    a.board[0].move('east')
-
+    a.play_game()
     # while
 
 
