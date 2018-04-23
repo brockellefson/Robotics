@@ -4,6 +4,7 @@ from sys import version_info
 import sys
 import termios
 import tty
+import vec_control
 
 PY2 = version_info[0] == 2  # Running Python 2.x?
 
@@ -192,6 +193,12 @@ class Controller:
             if debug:
                 print('setting {} to {}'.format(target, pose.pose[target]))
             self.setTarget(target, pose.pose[target])
+
+    def release(self):
+        a = vec_control.Pose([6000] * 18)
+        self.strike(a)
+        a = vec_control.Pose([0] * 18)
+        self.strike(a)
 
 
 def getch():

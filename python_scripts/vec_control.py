@@ -114,6 +114,27 @@ class Pose():
     def left_hand_close(self, amount=50):
         self.pose[17] += self.translate_to_servo(amount)
 
+def spin_move(controller, twists=10):
+    a = Pose()
+    aCon = Controller()
+    delay = 0.35
+
+    a.right_shoulder_lateral_out(200)
+    a.left_shoulder_lateral_out(200)
+    aCon.strike(a)
+
+    while twists > 0:
+        a.waist_left(200)
+        aCon.strike(a)
+        time.sleep(delay)
+        a.waist_right(200)
+        aCon.strike(a)
+        time.sleep(delay)
+        twists -= 1
+        print(twists)
+
+    aCon.release()
+
 
 def attack_animation(controller, chops=2):
     a = Pose()
@@ -138,13 +159,15 @@ def attack_animation(controller, chops=2):
         time.sleep(1)
         chops -= 1
 
-    a.pose = [0] * 18
-    aCon.strike(a)
+    aCon.release()
 
 
 def main():
     a = Controller()
     attack_animation(a)
+    spin_move(a)
+
+
 
 
 if __name__ == '__main__':
