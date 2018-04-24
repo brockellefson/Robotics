@@ -14,7 +14,7 @@ class Game:
         self.rob_health = 100
         self.client = client
         self.gameover = False
-        self.player_prompt = '>'
+        self.player_prompt = '> '
 
     def create_board(self, debug=False):
         '''Generate the board from level2
@@ -28,35 +28,23 @@ class Game:
         # place start and end first
         while len(self.corners) > 2:
             index = self.corners.pop()
-            self.board[index] = Node(self.events.pop(0), level2.connections[index])
+            event = self.events.pop(0)
+            self.board[index] = Node(event, level2.connections[index], index)
+            self.available.remove(index)
+
+            if event == 'start':
+                self.current_node = self.board[index]
+                if debug:
+                    print('found start node at {}'.format(index))
             if debug:
                 print('added {} to index {}'.format(self.board[index], index))
-
-        # update available
-        for corner in [0, 2, 6, 8]:
-            if corner not in self.corners:
-                self.available.remove(corner)
-                if debug:
-                    print('need to remove {} because it already has an type'.format(corner))
 
         random.shuffle(self.available)
         random.shuffle(self.events)
 
         # place the rest of the nodes
         for i in self.available:
-            self.board[i] = Node(self.events.pop(), level2.connections[i])
-
-
-        # add predefined connections
-        if debug:
-            print('adding connections')
-        for i in range(len(self.board)):
-            self.board[i].set_connections(level2.connections[i])
-            self.board[i].index = i
-            if self.board[i].node_type == 'start':
-                self.current_node = self.board[i]
-            if debug:
-                print('added {} to node {}'.format(level2.connections[i], i))
+            self.board[i] = Node(self.events.pop(), level2.connections[i], i)
 
     def __str__(self):
         out = 'Current board:\n'
@@ -96,8 +84,8 @@ class Game:
 
 
 class Node:
-    def __init__(self, node_type=None, connections={}):
-        self.index = 'ERROR'
+    def __init__(self, node_type=None, connections={}, index='ERROR'):
+        self.index = index
         self.connections = connections
         self.node_type = node_type
         self.visited = False
