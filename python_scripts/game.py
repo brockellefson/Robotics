@@ -6,8 +6,10 @@ import Network
 
 class Game:
     def __init__(self, client=''):
-        self.board = []
+        self.board = level2.empty_board
         self.events = level2.tile_types
+        self.corners = level2.corners
+        self.available = list(range(0, 9))
         self.current_node = Node()
         self.rob_health = 100
         self.client = client
@@ -20,31 +22,30 @@ class Game:
         Nodes contain a type, a visited status,
         and a dictionary of connections
         '''
-        fail_count = 0
 
-        # creates all necessary nodes
-        for i in range(len(self.events)):
-            random.shuffle(self.events)
-            # if you are about to pop a start or end node anywhere but a corner,
-            # shuffle until you place a valid node there instead
-            while (self.events[-1] == 'start' or self.events[-1] == 'end') and i not in level2.corners:
-                random.shuffle(self.events)
-                fail_count += 1
-                if fail_count > 20:
-                    swap_corner = random.choice(level2.corners[:-1])
-                    if debug:
-                        print('Reached an invalid state. Swapping for {} to resolve'.format(swap_corner))
-                    temp = self.board[swap_corner]
-                    self.board[swap_corner] = Node(self.events.pop())
-                    self.events.append(temp.node_type)
+        random.shuffle(self.corners)
+
+        # place start and end first
+        while len(self.corners) > 2:
+            index = self.corners.pop()
+            self.board[index] = Node(self.events.pop(0), level2.connections[index])
             if debug:
-                print('adding {} to the list at index {}'.format(self.events[-1], i))
-            temp_node = Node(self.events.pop())
-            self.board.append(temp_node)
-            self.board[-1].client = self.client
-            if temp_node.node_type == 'start':
-                self.current_node = self.board[-1]
-            fail_count = 0
+                print('added {} to index {}'.format(self.board[index], index))
+
+        # update available
+        for corner in [0, 2, 6, 8]:
+            if corner not in self.corners:
+                self.available.remove(corner)
+                if debug:
+                    print('need to remove {} because it already has an type'.format(corner))
+
+        random.shuffle(self.available)
+        random.shuffle(self.events)
+
+        # place the rest of the nodes
+        for i in self.available:
+            self.board[i] = Node(self.events.pop(), level2.connections[i])
+
 
         # add predefined connections
         if debug:
@@ -52,6 +53,8 @@ class Game:
         for i in range(len(self.board)):
             self.board[i].set_connections(level2.connections[i])
             self.board[i].index = i
+            if self.board[i].node_type == 'start':
+                self.current_node = self.board[i]
             if debug:
                 print('added {} to node {}'.format(level2.connections[i], i))
 
@@ -75,7 +78,7 @@ class Game:
             dir_choice = input(self.player_prompt).lower()
             self.current_node = self.board[self.current_node.move(dir_choice)]
 
-            self.gameover = True
+            # self.gameover = True
 
     def run(self):
         self.create_board()

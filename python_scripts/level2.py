@@ -24,6 +24,20 @@ map_string = '0---1---2\n    |   |\n3---4   5\n|   |\n6   7---8'
 
 corners = [0, 2, 6, 8]
 
+nodes = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+empty_board = [
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node(),
+    game.Node()
+]
+
 tile_types = ['start', 'end', 'recharge', 'weak', 'weak', 'weak', 'weak', 'strong', 'strong']
 
 
