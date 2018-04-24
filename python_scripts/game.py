@@ -1,7 +1,7 @@
 import random
 import tkinter as tk
 import level2
-import Network
+# import Network
 
 
 class Game:
@@ -13,6 +13,7 @@ class Game:
         self.current_node = Node()
         self.rob_health = 100
         self.client = client
+        self.hasKey = True
         self.gameover = False
         self.player_prompt = '> '
 
@@ -65,6 +66,12 @@ class Game:
             self.get_status()
             dir_choice = input(self.player_prompt).lower()
             self.current_node = self.board[self.current_node.move(dir_choice)]
+            if not self.current_node.visited:
+                if self.current_node.begin_scenario(self.hasKey):
+                    self.gameover = True
+            else:
+                print('This is a {} node that you have already visited'.format(self.current_node.node_type))
+
 
             # self.gameover = True
 
@@ -89,7 +96,6 @@ class Node:
         self.connections = connections
         self.node_type = node_type
         self.visited = False
-        self.widget = None
 
     def __str__(self):
         return '{} node with connections: {}'.format(self.node_type, self.connections)
@@ -100,20 +106,31 @@ class Node:
             out += dir + ' or '
         return out[0:-4]
 
-    def begin_scenario(self):
+    def begin_scenario(self, hasKey=False):
         self.visited = True
         if self.node_type == 'start':
-            level2.start_scenario()
+            print('this is the start')
+            # level2.start_scenario()
         elif self.node_type == 'end':
-            level2.end_scenario()
+            print('this is the end')
+            if hasKey:
+                print('you have a key')
+                level2.end_scenario()
+                return True
+            else:
+                print('but you don\'t have the key')
         elif self.node_type == 'recharge':
-            level2.recharge_scenario()
+            print('this is a recharge')
+            # level2.recharge_scenario()
         elif self.node_type == 'weak':
-            level2.combat_scenario(1)
+            print('this is a weak')
+            # level2.combat_scenario(1)
         elif self.node_type == 'strong':
-            level2.combat_scenario(2)
+            print('this is a strong')
+            # level2.combat_scenario(2)
         else:
             print('INVALID TYPE DETECTED')
+        return False
 
     def set_connections(self, connections):
         self.connections = connections
@@ -128,14 +145,6 @@ class Node:
         else:
             print('invalid move')
             return self.index
-
-    def make_widget(self):
-        # I dont know what type of widget to make this class
-        # or if this function even needs to exist
-        # we do need some way to put the map on the gui
-        self.widget = tk.PhotoImage(file='image_pngs/headv.png')
-        return self.widget
-
 
 class Enemy:
     def __init__(self, type):
