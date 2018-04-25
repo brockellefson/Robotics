@@ -114,52 +114,53 @@ class Pose():
     def left_hand_close(self, amount=50):
         self.pose[17] += self.translate_to_servo(amount)
 
-def spin_move(controller, twists=10):
+
+def spin_move(twists=10):
     a = Pose()
-    aCon = Controller()
+    a_con = Controller()
     delay = 0.35
 
     a.right_shoulder_lateral_out(200)
     a.left_shoulder_lateral_out(200)
-    aCon.strike(a)
+    a_con.strike(a)
 
     while twists > 0:
         a.waist_left(200)
-        aCon.strike(a)
+        a_con.strike(a)
         time.sleep(delay)
         a.waist_right(200)
-        aCon.strike(a)
+        a_con.strike(a)
         time.sleep(delay)
         twists -= 1
         print(twists)
 
-    aCon.release()
+    a_con.release()
 
 
-def attack_animation(controller, chops=2):
+def attack_animation(chops=2):
     a = Pose()
-    aCon = Controller()
+    a_con = Controller()
 
     a.right_shoulder_lateral_out(100)
     a.right_elbow_up(100)
     a.left_shoulder_lateral_out(100)
     a.left_shoulder_inline_up(100)
     a.left_elbow_down(100)
-    aCon.strike(a)
+    a_con.strike(a)
 
     while chops > 0:
         a.right_shoulder_inline_up(100)
         a.left_shoulder_inline_down(100)
-        aCon.strike(a)
+        a_con.strike(a)
         time.sleep(1)
 
         a.right_shoulder_inline_down(100)
         a.left_shoulder_inline_up(100)
-        aCon.strike(a)
+        a_con.strike(a)
         time.sleep(1)
         chops -= 1
 
-    aCon.release()
+    a_con.release()
 
 
 def main():
@@ -168,11 +169,10 @@ def main():
     spin_move(a)
 
 
-
-
 if __name__ == '__main__':
     from Maestro import Controller
     import time
+
     main()
 
 '''

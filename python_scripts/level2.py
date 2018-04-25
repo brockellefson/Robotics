@@ -66,8 +66,12 @@ def end_scenario():
     print('Atta boi, you brought the key to the end of the Lloydsville. This means you win.')
 
 
-def recharge_scenario():
-    print('you called an unimplemented method')
+def recharge_scenario(player):
+    out = 'Call up Liquor Locker (brrt brrt!), bring me apple vodka\n'
+    out += 'your health has been refilled'
+    player.hp = 100
+    print(out)
+
     pass
 
 
@@ -96,34 +100,20 @@ def combat_scenario(node):
             node.player.hp -= int(random.random() * node.enemy.am)
             node.enemy.hp -= int(random.random() * node.player.am)
 
+            # if either fighter has died
+            if node.player.hp <= 0:
+                node.player.hp = 0
+                node.player.gameover = True
+                fight_again = False
+
+            if node.enemy.hp <= 0:
+                node.enemy.hp = 0
+                node.cleared = True
+                fight_again = False
+
             out = 'after the fight, you have {} health left\n'.format(node.player.hp)
             out += '\t\tand the enemy has {} health left'.format(node.enemy.hp)
             print(out)
-
-            # if either fighter has died
-            if node.player.hp <= 0:
-                node.player.gameover = True
-                break
-            if node.enemy.hp <= 0:
-                node.cleared = True
-                break
-
-            # # get a valid yes/no to keep fighting
-            # while True:
-            #     fight_choice = input('do you want to keep fighting?\n' + prompt)
-            #     if fight_choice == 'yes':
-            #         break
-            #     elif fight_choice == 'no':
-            #         if random.random() > 0.25:
-            #             print('you managed to escape mid fight')
-            #             fight_again = False
-            #             break
-            #         else:
-            #             print('too bad, you failed to escape from the enemy')
-            #             break
-            #
-            #     else:
-            #         print('invalid input, please try again')
 
 
 def strong_scenario():

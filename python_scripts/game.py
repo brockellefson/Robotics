@@ -26,25 +26,24 @@ class Node:
 
     def format_connections(self):
         out = ''
-        for dir in self.connections:
-            out += dir + ' or '
+        for direction in self.connections:
+            out += direction + ' or '
         return out[0:-4]
 
-    def begin_scenario(self, hasKey=False):
+    def begin_scenario(self, has_key=False):
         if self.node_type == 'start':
             print('this is the start')
             # level2.start_scenario()
         elif self.node_type == 'end':
             print('this is the end')
-            if hasKey:
+            if has_key:
                 print('you have a key')
                 level2.end_scenario()
                 return True
             else:
                 print('but you don\'t have the key')
         elif self.node_type == 'recharge':
-            print('this is a recharge')
-            level2.recharge_scenario()
+            level2.recharge_scenario(self.player)
         elif self.node_type == 'weak':
             print('this is a weak')
             level2.combat_scenario(self)
@@ -74,11 +73,11 @@ class Node:
 
 
 class Player:
-    def __init__(self, current_node=Node(''), health=100, hasKey=False, gameover=False):
+    def __init__(self, current_node=Node(''), health=100, has_key=False, gameover=False):
         self.current_node = current_node
         self.hp = health
         self.am = 35
-        self.hasKey = hasKey
+        self.hasKey = has_key
         self.gameover = gameover
 
 
