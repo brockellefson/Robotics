@@ -4,16 +4,13 @@ from copy import deepcopy
 import level2
 
 
-# import Network
-
-
 class Node:
-    def __init__(self, player, node_type=None, connections={}, index='ERROR', key_node=False):
+    def __init__(self, player, node_type=None, connections={}, index='ERROR'):
         self.index = index
         self.connections = connections
         self.node_type = node_type
         self.cleared = False
-        self.key_node = key_node
+        self.key_node = False
         self.player = player
 
         if self.node_type == 'weak':
@@ -30,13 +27,13 @@ class Node:
             out += direction + ' or '
         return out[0:-4]
 
-    def begin_scenario(self, has_key=False):
+    def begin_scenario(self):
         if self.node_type == 'start':
             print('this is the start')
             # level2.start_scenario()
         elif self.node_type == 'end':
             print('this is the end')
-            if has_key:
+            if self.player.has_key:
                 print('you have a key')
                 level2.end_scenario()
                 return True
@@ -73,11 +70,11 @@ class Node:
 
 
 class Player:
-    def __init__(self, current_node=Node(''), health=100, has_key=False, gameover=False):
+    def __init__(self, current_node=Node(''), health=100, gameover=False):
         self.current_node = current_node
         self.hp = health
-        self.am = 35
-        self.hasKey = has_key
+        self.am = 100
+        self.has_key = False
         self.gameover = gameover
 
 
@@ -115,16 +112,21 @@ class Game:
 
         random.shuffle(self.available)
         random.shuffle(self.events)
+        placed_key = False
 
         # place the rest of the nodes
         for i in self.available:
             event = self.events.pop()
             self.board[i] = Node(self.player, event, level2.connections[i], i)
-            if event == 'weak':
-                if debug:
-                    print('adding weak enemies to node {}'.format(i))
+
             if debug:
                 print('added {} to index {}'.format(self.board[i], i))
+
+            if event == 'strong' and not placed_key:
+                placed_key = True
+                self.board[i].key_node = True
+                if debug:
+                    print('placed the key at node {}'.format(i))
 
     def __str__(self):
         out = 'Current board:\n'
@@ -149,28 +151,12 @@ class Game:
             self.player.current_node = self.board[self.player.current_node.move(
                 dir_choice)]
             if not self.player.current_node.cleared:
-                if self.player.current_node.begin_scenario(self.player.hasKey):
+                if self.player.current_node.begin_scenario():
                     self.player.gameover = True
             else:
                 print('This is a {} node that you have already cleared'.format(
                     self.player.current_node.node_type))
         level2.goodbye_message()
-
-    '''
-    def run(self):
-        self.create_board()
-        current_node = self.board[0]
-        self.client.ttsmsg = 'Welcome to Lloydsville. Home of the wicked. Lets begin'
-        while self.gameover is False:
-            if self.rob_health <= 0:
-                self.client.ttsmsg = 'My health has been depleted.'
-                self.gameover = True
-                break
-        print('Current Health: {}'.format(self.rob_health))
-        # self.client.ttsmsg = 'I am at {}'.format(current_node)
-
-        self.client.ttsmsg = 'The Game is over. Goodday'
-    '''
 
 
 class Enemy:
@@ -183,18 +169,10 @@ class Enemy:
         damage = self.am * rand
         print(damage)
 
-    # def hit(damage):
-    #     self.hp = self.hp - damage
-    #     if self.hp <= 0:
-    #         self.alive = False
-
-    # def attack():
-    #     return 10
-
 
 def main():
     a = Game()
-    a.create_board()
+    a.create_board(True)
 
     a.play_game()
 

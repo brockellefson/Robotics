@@ -110,9 +110,13 @@ def combat_scenario(node):
                 node.enemy.hp = 0
                 node.cleared = True
                 fight_again = False
+                if node.key_node:
+                    node.player.has_key = True
 
             out = 'after the fight, you have {} health left\n'.format(node.player.hp)
             out += '\t\tand the enemy has {} health left'.format(node.enemy.hp)
+            if node.player.has_key:
+                out += '\nyou found some weird old key on the ground'
             print(out)
 
 
