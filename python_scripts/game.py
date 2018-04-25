@@ -73,7 +73,7 @@ class Player:
     def __init__(self, current_node=Node(''), health=100, gameover=False):
         self.current_node = current_node
         self.hp = health
-        self.am = 100
+        self.am = 500
         self.has_key = False
         self.gameover = gameover
 
@@ -172,7 +172,7 @@ class Enemy:
 
 def main():
     a = Game()
-    a.create_board(True)
+    a.create_board()
 
     a.play_game()
 

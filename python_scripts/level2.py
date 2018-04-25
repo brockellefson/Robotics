@@ -85,7 +85,7 @@ def combat_scenario(node):
     while fight_again:
         choice = input('are you going to run or fight?\n' + prompt)
         if choice == 'run':
-            out = 'you try to run '
+            out = 'you try to run you pussy'
             if random.random() > 0.25:
                 out += 'and are just fast enough to escape'
                 out += '\nthe enemy is still here and if you re-enter this node, you must face it again'
@@ -115,7 +115,7 @@ def combat_scenario(node):
 
             out = 'after the fight, you have {} health left\n'.format(node.player.hp)
             out += '\t\tand the enemy has {} health left'.format(node.enemy.hp)
-            if node.player.has_key:
+            if node.player.has_key and node.key_node:
                 out += '\nyou found some weird old key on the ground'
             print(out)
 
