@@ -1,5 +1,6 @@
 import gui_programming
 import Network
+import game
 import threading
 
 if __name__ == '__main__':
@@ -13,11 +14,11 @@ if __name__ == '__main__':
     server = Network.Server(3030)
     object_L.append(server)
 
-    listener = Network.Listener(server, client, gui)
-    object_L.append(listener)
-
-    game = Game.Game(client)
+    game = game.Game(client)
     object_L.append(game)
+
+    listener = Network.Listener(server, game)
+    object_L.append(listener)
 
     #start all the objects
     thread_L = []

@@ -1,4 +1,5 @@
 import time
+from Maestro import Controller
 
 
 class Pose():
@@ -137,6 +138,76 @@ def spin_move(twists=10):
     a_con.release()
 
 
+def move_north():
+    a = Pose()
+    a_con = Controller()
+
+    # move forward
+    a.pose[1] = 5000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # stop
+    a.pose[1] = 6000
+    a_con.strike(a)
+
+
+def move_south():
+    a = Pose()
+    a_con = Controller()
+
+    # move backwards
+    a.pose[1] = 7000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # stop
+    a.pose[1] = 6000
+    a_con.strike(a)
+
+
+def move_east():
+    a = Pose()
+    a_con = Controller()
+
+    # turn left
+    a.pose[2] = 7000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # move forward
+    a.pose[2] = 6000
+    a.pose[1] = 5000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # turn right
+    a.pose[2] = 5000
+    a_con.strike(a)
+    time.sleep(1)
+
+
+def move_west():
+    a = Pose()
+    a_con = Controller()
+
+    # turn right
+    a.pose[2] = 5000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # move forward
+    a.pose[2] = 6000
+    a.pose[1] = 5000
+    a_con.strike(a)
+    time.sleep(1)
+
+    # turn left
+    a.pose[2] = 6000
+    a_con.strike(a)
+    time.sleep(1)
+
+
 def attack_animation(chops=2):
     a = Pose()
     a_con = Controller()
@@ -164,9 +235,9 @@ def attack_animation(chops=2):
 
 
 def main():
-    a = Controller()
-    attack_animation(a)
-    spin_move(a)
+    # a = Controller()
+    attack_animation()
+    spin_move()
 
 
 if __name__ == '__main__':

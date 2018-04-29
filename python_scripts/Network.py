@@ -4,6 +4,7 @@ import sys
 import socket
 # import gui_programming
 import threading
+import level2
 
 class Server:
     def __init__(self, port):
@@ -58,10 +59,9 @@ class Client:
                 self.ttsmsg = ''
 
 class Listener:
-    def __init__(self, server, client, game):
+    def __init__(self, server, game):
         self.server = server
-        self.client = client
-        self.gui = gui
+        self.game = game
 
     def run(self):
         while True:
@@ -71,32 +71,26 @@ class Listener:
                 data = self.server.data
                 data = data.lower()
                 print('Driver data: ' + data)
-                if 'forward' in data:
-                    self.gui.add_forward()
-                    self.client.ttsmsg = 'moving north my dude'
+                if 'north' in data:
+                    self.game.set_direction('north')
 
-                elif 'reverse' in data:
-                    self.gui.add_reverse()
-                    self.client.ttsmsg = 'moving south my dude'
+                elif 'south' in data:
+                    self.game.set_direction('south')
 
-                elif 'left' in data:
-                    self.gui.add_left()
-                    self.client.ttsmsg = 'moving east my dude'
+                elif 'east' in data:
+                    self.game.set_direction('east')
 
-                elif 'center' in data:
-                    self.gui.add_center()
-                    self.client.ttsmsg = 'im straight as an arrow'
+                elif 'west' in data:
+                    self.game.set_direction('west')
 
-                elif 'delete' in data:
-                    self.gui.clear_program()
-                    self.client.ttsmsg = 'kill myself l m a o'
+                elif 'run' in data:
+                    level2.set_choice('run')
 
-                elif 'right' in data:
-                    self.gui.add_right()
-                    self.client.ttsmsg = 'moving west my dude'
+                elif 'fight' in data:
+                    level2.set_choice('fight')
 
-                elif 'start' in data:
-                    self.gui.submit()
+                elif 'yes' in data:
+                    pass
 
 
                 self.server.resetData()

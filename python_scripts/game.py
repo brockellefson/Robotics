@@ -1,6 +1,6 @@
 import random
 from copy import deepcopy
-
+import vec_control
 import level2
 
 
@@ -27,7 +27,7 @@ class Node:
             out += direction + ' or '
         return out[0:-4]
 
-    def begin_scenario(self):
+    def begin_scenario(self, client):
         if self.node_type == 'start':
             print('this is the start')
             # level2.start_scenario()
@@ -35,18 +35,18 @@ class Node:
             print('this is the end')
             if self.player.has_key:
                 print('you have a key')
-                level2.end_scenario()
+                level2.end_scenario(client)
                 return True
             else:
                 print('but you don\'t have the key')
         elif self.node_type == 'recharge':
-            level2.recharge_scenario(self.player)
+            level2.recharge_scenario(self.player, client)
         elif self.node_type == 'weak':
             print('this is a weak')
-            level2.combat_scenario(self)
+            level2.combat_scenario(self, client)
         elif self.node_type == 'strong':
             print('this is a strong')
-            level2.combat_scenario(self)
+            level2.combat_scenario(self, client)
         else:
             print('INVALID TYPE DETECTED')
         return False
@@ -58,7 +58,7 @@ class Node:
         if direction in self.connections:
             print('valid move')
             return self.connections[direction]
-        elif direction == 'yes' and len(self.connections) == 1:
+        elif 'yes' in direction and len(self.connections) == 1:
             for connection in self.connections:
                 return self.connections[connection]
         elif direction == 'quit':
@@ -86,6 +86,7 @@ class Game:
         self.available = list(range(0, 9))
         self.player = Player()
         self.client = client
+        self.direction = ''
 
     def create_board(self, debug=False):
         '''Generate the board from level2
@@ -136,28 +137,36 @@ class Game:
 
     def get_status(self):
         out = '\nThe map looks like this:\n'
-        out += level2.map_string
+        # out += level2.map_string
         out += '\nYou are at node {}, would you like to move {}?'.format(self.player.current_node.index,
                                                                          self.player.current_node.format_connections())
         print(out)
 
     def play_game(self):
-        level2.welcome_message()
+        level2.welcome_message(self.client)
         while not self.player.gameover:
             # main game loop here
             self.get_status()
 
-            dir_choice = input(level2.prompt).lower()
-            self.player.current_node = self.board[self.player.current_node.move(
-                dir_choice)]
-            if not self.player.current_node.cleared:
-                if self.player.current_node.begin_scenario():
-                    self.player.gameover = True
-            else:
-                print('This is a {} node that you have already cleared'.format(
-                    self.player.current_node.node_type))
-        level2.goodbye_message()
+            dir_choice = self.get_direction()
+            if dir_choice is not '':
+                self.player.current_node = self.board[self.player.current_node.move(
+                    dir_choice)]
+                if not self.player.current_node.cleared:
+                    if self.player.current_node.begin_scenario(self.client):
+                        self.player.gameover = True
+                else:
+                    print('This is a {} node that you have already cleared'.format(
+                        self.player.current_node.node_type))
 
+                self.set_direction('')
+        level2.goodbye_message(self.client)
+
+    def get_direction(self):
+        return self.direction
+
+    def set_direction(self, d):
+        self.direction = d
 
 class Enemy:
     def __init__(self, hp=100, am=0):
