@@ -1,5 +1,5 @@
+import Maestro
 import time
-from Maestro import Controller
 
 
 class Pose():
@@ -116,28 +116,6 @@ class Pose():
         self.pose[17] += self.translate_to_servo(amount)
 
 
-def spin_move(twists=10):
-    a = Pose()
-    a_con = Controller()
-    delay = 0.35
-
-    a.right_shoulder_lateral_out(200)
-    a.left_shoulder_lateral_out(200)
-    a_con.strike(a)
-
-    while twists > 0:
-        a.waist_left(200)
-        a_con.strike(a)
-        time.sleep(delay)
-        a.waist_right(200)
-        a_con.strike(a)
-        time.sleep(delay)
-        twists -= 1
-        print(twists)
-
-    a_con.release()
-
-
 def move_north():
     a = Pose()
     a_con = Controller()
@@ -210,7 +188,7 @@ def move_west():
 
 def attack_animation(chops=2):
     a = Pose()
-    a_con = Controller()
+    a_con = Maestro.Controller()
 
     a.right_shoulder_lateral_out(100)
     a.right_elbow_up(100)
@@ -234,16 +212,51 @@ def attack_animation(chops=2):
     a_con.release()
 
 
+def spin_move(twists=10):
+    a = Pose()
+    a_con = Maestro.Controller()
+    delay = 0.5
+
+    a.right_shoulder_lateral_out(200)
+    a.left_shoulder_lateral_out(200)
+    a_con.strike(a)
+
+    while twists > 0:
+        a.waist_left(200)
+        a_con.strike(a)
+        time.sleep(delay)
+        a.waist_right(200)
+        a_con.strike(a)
+        time.sleep(delay)
+        twists -= 1
+
+    a_con.release()
+
+
+def get_lit():
+    a = Pose()
+    a_con = Maestro.Controller()
+    delay = 1
+
+    a.left_shoulder_lateral_out(50)
+    a.right_shoulder_lateral_out(50)
+    a.right_shoulder_inline_up(100)
+    a_con.strike(a)
+    time.sleep(delay)
+
+    a.right_elbow_up(200)
+    a_con.strike(a)
+    time.sleep(delay)
+
+    a_con.release()
+
+
+
 def main():
-    # a = Controller()
-    attack_animation()
-    spin_move()
+    get_lit()
 
 
 if __name__ == '__main__':
-    from Maestro import Controller
-    import time
-
     main()
 
 '''

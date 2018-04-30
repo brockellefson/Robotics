@@ -32,6 +32,7 @@ public class Client implements Runnable{
             System.out.println("Client connected to ROB");
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
+            message.toLowerCase();
             out.writeUTF(message);
             System.out.println("Sent Message: " + message);
             client.close();

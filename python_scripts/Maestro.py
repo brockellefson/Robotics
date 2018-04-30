@@ -5,6 +5,7 @@ import sys
 import termios
 import tty
 import vec_control
+import time
 
 PY2 = version_info[0] == 2  # Running Python 2.x?
 
@@ -47,6 +48,7 @@ class Controller:
         # Servo minimum and maximum targets can be restricted to protect components.
         self.Mins = [0] * 24
         self.Maxs = [0] * 24
+        self.setup()
 
     # Cleanup by closing USB serial port
     def close(self):
@@ -195,8 +197,7 @@ class Controller:
             self.setTarget(target, pose.pose[target])
 
     def release(self):
-        a = vec_control.Pose([6000] * 18)
-        self.strike(a)
+        time.sleep(1)
         a = vec_control.Pose([0] * 18)
         self.strike(a)
 

@@ -12,7 +12,7 @@ connections = {
     5: {'north': 2},
     6: {'north': 3},
     7: {'north': 4, 'east': 8},
-    8: {'west': 7},
+    8: {'west': 7}
 
     # 0---1---2
     #     |   |
@@ -59,42 +59,43 @@ def goodbye_message(client):
     client.ttsmsg = 'The Game is over. Good\'day'
 
 
-
-
 def end_scenario(client):
     client.ttsmsg = 'Atta boi, you brought the key to the end of the Lloydsville. This means you win.'
 
+
 def recharge_scenario(player, client):
-    out = 'Call up Liquor Locker (brrt brrt!), bring me apple vodka\n'
+    out = 'Call up Liquor Locker (burrt burrt!), bring me apple vodka '
     out += 'your health has been refilled'
     player.hp = 100
-    #TODO: get lit
-    #vec_control.get_lit()
-    #print(out)
+    # TODO: get lit
+    # vec_control.get_lit()
+    # print(out)
     client.ttsmsg = out
+
 
 def combat_scenario(node, client):
     # print('hey partner, there\'s an enemy here\nHP: {}\nAM: {}\n'.format(enemy.hp, enemy.am))
     out = 'hey partner, there\'s an enemy here\n'
     out += 'HP: {}\nAM: {}'.format(node.enemy.hp, node.enemy.am)
-    client.ttsmsg = out
-    #print(out)
+    client.ttsmsg = 'hey partner, theres a {} enemy here would you like to fight or run?'.format(
+        node.node_type)
+    print(out)
 
     fight_again = True
     while fight_again:
         choice = get_choice()
         if choice is not '':
             if choice == 'run':
-                out = 'you try to run you pussy'
+                out = 'you try to run'
                 if random.random() > 0.25:
                     out += 'and are just fast enough to escape'
-                    out += '\nthe enemy is still here and if you re-enter this node, you must face it again'
+                    out += ' the enemy is still here, so be careful'
                     fight_again = False
                 else:
-                    out += 'but get caught because you\'re slow'
+                    out += ' but get caught because you\'re slow'
                     choice = 'fight'
                 client.ttsmsg = out
-                #print(out)
+                # print(out)
             if choice == 'fight':
                 print('you choose to fight')
                 vec_control.attack_animation()
@@ -114,16 +115,21 @@ def combat_scenario(node, client):
                     if node.key_node:
                         node.player.has_key = True
 
-                out = 'after the fight, you have {} health left\n'.format(node.player.hp)
-                out += '\t\tand the enemy has {} health left'.format(node.enemy.hp)
+                out = 'after the fight, you have {} health left '.format(
+                    node.player.hp)
+                out += '\t\tand the enemy has {} health left'.format(
+                    node.enemy.hp)
                 if node.player.has_key and node.key_node:
-                    out += '\nyou found some weird old key on the ground'
-                #print(out)
+                    out += ' you found some weird old key on the ground'
+                # print(out)
                 client.ttsmsg = out
+    set_choice('')
+
 
 def get_choice():
     global choice
     return choice
+
 
 def set_choice(responce):
     global choice

@@ -5,10 +5,9 @@ import threading
 
 if __name__ == '__main__':
     object_L = [] #keeps track of objects, so we can kill their threads at the end
-    gui = gui_programming.GUI()
 
     #create network
-    client = Network.Client('10.200.53.215', 4040)
+    client = Network.Client('10.200.54.59', 4040)
     object_L.append(client)
 
     server = Network.Server(3030)
@@ -30,4 +29,3 @@ if __name__ == '__main__':
         t.start()
 
 
-    gui.run()

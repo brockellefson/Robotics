@@ -5,6 +5,7 @@ import socket
 # import gui_programming
 import threading
 import level2
+import time
 
 class Server:
     def __init__(self, port):
@@ -20,7 +21,7 @@ class Server:
     def runServer(self):
         print('Server starting')
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("10.200.1.118", self.port))
+        s.bind(("10.200.32.46", self.port))
         while 1:
             s.listen(5)
             conn, addr = s.accept()
@@ -57,6 +58,7 @@ class Client:
             if self.ttsmsg is not '': #if we have a message to send to Android
                 self.runClient()
                 self.ttsmsg = ''
+                time.sleep(1)
 
 class Listener:
     def __init__(self, server, game):

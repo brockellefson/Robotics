@@ -2,6 +2,7 @@ import random
 from copy import deepcopy
 import vec_control
 import level2
+import time
 
 
 class Node:
@@ -79,7 +80,7 @@ class Player:
 
 
 class Game:
-    def __init__(self, client=''):
+    def __init__(self, client):
         self.board = level2.empty_board
         self.events = level2.tile_types
         self.corners = level2.corners
@@ -101,7 +102,8 @@ class Game:
         while len(self.corners) > 2:
             index = self.corners.pop()
             event = self.events.pop(0)
-            self.board[index] = Node(self.player, event, level2.connections[index], index)
+            self.board[index] = Node(
+                self.player, event, level2.connections[index], index)
             self.available.remove(index)
 
             if event == 'start':
@@ -137,29 +139,38 @@ class Game:
 
     def get_status(self):
         out = '\nThe map looks like this:\n'
-        # out += level2.map_string
-        out += '\nYou are at node {}, would you like to move {}?'.format(self.player.current_node.index,
-                                                                         self.player.current_node.format_connections())
+        out += level2.map_string
+        temp = 'You are at node {}, would you like to move {}?'.format(self.player.current_node.index,
+                                                                       self.player.current_node.format_connections())
+        out += temp
+        self.client.ttsmsg = temp
         print(out)
 
     def play_game(self):
         level2.welcome_message(self.client)
+        dir_choice = ''
+        time.sleep(1)
+        self.get_status()
         while not self.player.gameover:
             # main game loop here
-            self.get_status()
 
             dir_choice = self.get_direction()
             if dir_choice is not '':
+                self.get_status()
+                time.sleep(2)
                 self.player.current_node = self.board[self.player.current_node.move(
                     dir_choice)]
+                # TODO SOMETIMES MOVING IS a bit fucky and doesnt recognize that an input was sent
                 if not self.player.current_node.cleared:
                     if self.player.current_node.begin_scenario(self.client):
                         self.player.gameover = True
+                    time.sleep(2)
+                    self.get_status()
                 else:
                     print('This is a {} node that you have already cleared'.format(
                         self.player.current_node.node_type))
 
-                self.set_direction('')
+            self.set_direction('')
         level2.goodbye_message(self.client)
 
     def get_direction(self):
@@ -167,6 +178,12 @@ class Game:
 
     def set_direction(self, d):
         self.direction = d
+
+    def run(self):
+        self.create_board()
+
+        self.play_game()
+
 
 class Enemy:
     def __init__(self, hp=100, am=0):
@@ -177,14 +194,3 @@ class Enemy:
         rand = random.random()
         damage = self.am * rand
         print(damage)
-
-
-def main():
-    a = Game()
-    a.create_board()
-
-    a.play_game()
-
-
-if __name__ == '__main__':
-    main()
