@@ -58,6 +58,8 @@ class Node:
     def move(self, direction):
         if direction in self.connections:
             print('valid move')
+            if direction == 'north':
+
             return self.connections[direction]
         elif 'yes' in direction and len(self.connections) == 1:
             for connection in self.connections:
