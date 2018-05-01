@@ -2,6 +2,7 @@ import random
 import Network
 import game
 import vec_control
+import time
 
 connections = {
     0: {'east': 1},
@@ -58,6 +59,8 @@ def welcome_message(client):
 def goodbye_message(client):
     client.ttsmsg = 'The Game is over. Good\'day'
 
+def start_scenario(client):
+    client.ttsmsg = 'you made it but not to the end, you made it back to the start'
 
 def end_scenario(client):
     client.ttsmsg = 'Atta boi, you brought the key to the end of the Lloydsville. This means you win.'
@@ -77,7 +80,7 @@ def combat_scenario(node, client):
     # print('hey partner, there\'s an enemy here\nHP: {}\nAM: {}\n'.format(enemy.hp, enemy.am))
     out = 'hey partner, there\'s an enemy here\n'
     out += 'HP: {}\nAM: {}'.format(node.enemy.hp, node.enemy.am)
-    client.ttsmsg = 'hey partner, theres a {} enemy here would you like to fight or run?'.format(
+    client.ttsmsg = 'hey partner, there\'s a {} enemy here would you like to fight or run?'.format(
         node.node_type)
     print(out)
 
@@ -123,7 +126,11 @@ def combat_scenario(node, client):
                     out += ' you found some weird old key on the ground'
                 # print(out)
                 client.ttsmsg = out
-    set_choice('')
+                time.sleep(2)
+                if fight_again:
+                    client.ttsmsg = 'the {} enemy is still alive would you like to keep fighting or run away?'.format(
+                        node.node_type)
+        set_choice('')
 
 
 def get_choice():

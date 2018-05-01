@@ -7,7 +7,7 @@ if __name__ == '__main__':
     object_L = [] #keeps track of objects, so we can kill their threads at the end
 
     #create network
-    client = Network.Client('10.200.54.59', 4040)
+    client = Network.Client('10.200.59.121', 4040)
     object_L.append(client)
 
     server = Network.Server(3030)

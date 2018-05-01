@@ -118,7 +118,7 @@ class Pose():
 
 def move_north():
     a = Pose()
-    a_con = Controller()
+    a_con = Maestro.Controller()
 
     # move forward
     a.pose[1] = 5000
@@ -132,7 +132,7 @@ def move_north():
 
 def move_south():
     a = Pose()
-    a_con = Controller()
+    a_con = Maestro.Controller()
 
     # move backwards
     a.pose[1] = 7000
@@ -144,9 +144,9 @@ def move_south():
     a_con.strike(a)
 
 
-def move_east():
+def move_west():
     a = Pose()
-    a_con = Controller()
+    a_con = Maestro.Controller()
 
     # turn left
     a.pose[2] = 7000
@@ -164,10 +164,14 @@ def move_east():
     a_con.strike(a)
     time.sleep(1)
 
+    # stop
+    a.center()
+    a_con.strike(a)
 
-def move_west():
+
+def move_east():
     a = Pose()
-    a_con = Controller()
+    a_con = Maestro.Controller()
 
     # turn right
     a.pose[2] = 5000
@@ -184,6 +188,10 @@ def move_west():
     a.pose[2] = 6000
     a_con.strike(a)
     time.sleep(1)
+
+    # stop
+    a.center()
+    a_con.strike(a)
 
 
 def attack_animation(chops=2):
@@ -254,6 +262,7 @@ def get_lit():
 
 def main():
     get_lit()
+    move_north()
 
 
 if __name__ == '__main__':

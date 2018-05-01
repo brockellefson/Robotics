@@ -1,6 +1,6 @@
 import random
 from copy import deepcopy
-import vec_control
+import vec_control as vc
 import level2
 import time
 
@@ -31,7 +31,7 @@ class Node:
     def begin_scenario(self, client):
         if self.node_type == 'start':
             print('this is the start')
-            # level2.start_scenario()
+            level2.start_scenario(client)
         elif self.node_type == 'end':
             print('this is the end')
             if self.player.has_key:
@@ -42,6 +42,7 @@ class Node:
                 print('but you don\'t have the key')
         elif self.node_type == 'recharge':
             level2.recharge_scenario(self.player, client)
+            vc.get_lit()
         elif self.node_type == 'weak':
             print('this is a weak')
             level2.combat_scenario(self, client)
@@ -55,11 +56,21 @@ class Node:
     def set_connections(self, connections):
         self.connections = connections
 
+
+    def move_ROB(self, direction):
+        if direction == 'north':
+            vc.move_north()
+        elif direction == 'south':
+            vc.move_south()
+        elif direction == 'east':
+            vc.move_east()
+        elif direction == 'west':
+            vc.move_west()
+
     def move(self, direction):
         if direction in self.connections:
             print('valid move')
-            if direction == 'north':
-
+            self.move_ROB(direction)
             return self.connections[direction]
         elif 'yes' in direction and len(self.connections) == 1:
             for connection in self.connections:
@@ -76,7 +87,7 @@ class Player:
     def __init__(self, current_node=Node(''), health=100, gameover=False):
         self.current_node = current_node
         self.hp = health
-        self.am = 500
+        self.am = 43
         self.has_key = False
         self.gameover = gameover
 
@@ -141,7 +152,7 @@ class Game:
 
     def get_status(self):
         out = '\nThe map looks like this:\n'
-        out += level2.map_string
+        out += level2.map_string + '\n'
         temp = 'You are at node {}, would you like to move {}?'.format(self.player.current_node.index,
                                                                        self.player.current_node.format_connections())
         out += temp
@@ -158,10 +169,9 @@ class Game:
 
             dir_choice = self.get_direction()
             if dir_choice is not '':
-                self.get_status()
-                time.sleep(2)
                 self.player.current_node = self.board[self.player.current_node.move(
                     dir_choice)]
+
                 # TODO SOMETIMES MOVING IS a bit fucky and doesnt recognize that an input was sent
                 if not self.player.current_node.cleared:
                     if self.player.current_node.begin_scenario(self.client):
@@ -169,8 +179,10 @@ class Game:
                     time.sleep(2)
                     self.get_status()
                 else:
-                    print('This is a {} node that you have already cleared'.format(
-                        self.player.current_node.node_type))
+                    out = 'This is a {} node that you have already cleared'.format(
+                        self.player.current_node.node_type)
+                    print(out)
+                    self.client.ttsmsg = out
 
             self.set_direction('')
         level2.goodbye_message(self.client)
